@@ -38,7 +38,7 @@ describe('Employee Class', () => {
       });
 
     describe("getRole", () => {
-        it("should have getRole() produce 'Employee\'", () => {
+        it("should have getRole() produce 'Employee'", () => {
           const testRole = 'Employee';
           const newEmployee = new Employee('Rolo', 12, 'rolo77@gmail.com');
           expect(newEmployee.getRole()).toBe(testRole);

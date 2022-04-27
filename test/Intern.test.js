@@ -3,7 +3,7 @@ const Intern = require("../lib/Intern");
 
 describe("Intern Class", () => {
   it('sets fourth argument as school', () => {
-    expect(new Intern('Rolo',16,'rolo77@gmail.com', 'escuela').officeNumber).toBe('escuela');
+    expect(new Intern('Rolo',16,'rolo77@gmail.com', 'escuela').school).toBe('escuela');
   });
   
   describe("getSchool", () => {

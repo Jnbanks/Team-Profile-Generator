@@ -3,6 +3,7 @@ const inquirer = require('inquirer');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
+const fs = require('fs');
 
 const employees = [];
 
@@ -10,30 +11,34 @@ const employees = [];
 function buildTeam() {
     inquirer.prompt([
         {
-            name: 'buildTeamPrompt',
-            type: 'list',
-            message: 'Who would you like to add to your team?',
-            choices: ['Manager', 'Engineer', 'Intern', 'Everyone has been added!']
+            name: "buildTeamPrompt",
+            type: "list",
+            message: "Who would you like to add to your team?",
+            choices: ["Manager", "Engineer", "Intern", "Everyone has been added!"]
         }
-    ]) .then(answers => {
-        switch (answers.question) {
-            case 'Manager':
-                console.log('add manager!')
+    ]).then(answers => {
+        switch (answers.buildTeamPrompt) {
+            case "Manager":
+                console.log("add manager!")
                 addManager();
                 break;
 
-            case 'Engineer':
-                console.log('add engineer!')
+            case "Engineer":
+                console.log("add engineer!")
                 addEngineer();
                 break;
 
-            case 'Intern':
-                console.log('add intern!')
+            case "Intern":
+                console.log("add intern!")
                 addIntern();
                 break;
 
+            case "Everyone has been added!":
+                htmlBuilder();
+                break;
+
             default:
-                htmlBuilder()
+                console.log("You completed your team!")
                 break;
         }
     })
@@ -42,24 +47,24 @@ function buildTeam() {
 function addManager() {
     inquirer.prompt([
         {
-            name: 'managerName',
+            name: "managerName",
             message: "What is the manager's name?",
-            type: 'input'
+            type: "input"
         },
         {
-            name: 'managerId',
+            name: "managerId",
             message: "What is the manager's id?",
-            type: 'input'
+            type: "input"
         },
         {
-            name: 'managerEmail',
+            name: "managerEmail",
             message: "What is the manager's email address?",
-            type: 'input'
+            type: "input"
         },
         {
-            name: 'managerOfficeNumber',
+            name: "managerOfficeNumber",
             message: "What is the manager's office number?",
-            type: 'input'
+            type: "input"
         }
 
     ]).then(answers => {
@@ -72,24 +77,24 @@ function addManager() {
 function addEngineer() {
     inquirer.prompt([
         {
-            name: 'engineerName',
+            name: "engineerName",
             message: "What is the engineer's name?",
-            type: 'input'
+            type: "input"
         },
         {
-            name: 'engineerId',
+            name: "engineerId",
             message: "What is the engineer's id?",
-            type: 'input'
+            type: "input"
         },
         {
-            name: 'engineerEmail',
+            name: "engineerEmail",
             message: "What is the engineer's email address?",
-            type: 'input'
+            type: "input"
         },
         {
-            name: 'engineerGithub',
+            name: "engineerGithub",
             message: "What is the engineer's Github?",
-            type: 'input'
+            type: "input"
         }
 
     ]).then(answers => {
@@ -102,24 +107,24 @@ function addEngineer() {
 function addIntern() {
     inquirer.prompt([
         {
-            name: 'internName',
+            name: "internName",
             message: "What is the intern's name?",
-            type: 'input'
+            type: "input"
         },
         {
-            name: 'internId',
+            name: "internId",
             message: "What is the intern's id?",
-            type: 'input'
+            type: "input"
         },
         {
-            name: 'internEmail',
+            name: "internEmail",
             message: "What is the intern's email address?",
-            type: 'input'
+            type: "input"
         },
         {
-            name: 'internSchool',
+            name: "internSchool",
             message: "What is the intern's school?",
-            type: 'input'
+            type: "input"
         }
 
     ]).then(answers => {
@@ -128,3 +133,11 @@ function addIntern() {
         buildTeam();
     })
 }
+
+function htmlBuilder () {
+    console.log("Team built!");
+    fs.writeFile("dist/index.html", htmlSheet, (err) =>
+    err ? console.log(err) : console.log("Success!"))
+}
+
+buildTeam();

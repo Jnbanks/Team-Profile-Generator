@@ -1,6 +1,6 @@
 const Employee = require('../lib/Employee');
 
-describe('Employee', () => {
+describe('Employee Class', () => {
     it('sets first agrument as name property', () => {
       expect(new Employee('Rolo',16,'rolo77@gmail.com').name).toBe('Rolo');
     });

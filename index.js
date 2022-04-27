@@ -35,6 +35,7 @@ function buildTeam() {
 
             case "Everyone has been added!":
                 htmlBuilder();
+                cssBuilder();
                 break;
 
             default:
@@ -136,8 +137,102 @@ function addIntern() {
 
 function htmlBuilder () {
     console.log("Team built!");
-    fs.writeFile("dist/index.html", htmlSheet, (err) =>
-    err ? console.log(err) : console.log("Success!"))
+
+    const buildhtml = team => {
+
+        const buildManager = manager => {
+            return `
+        <div class="card">
+            <h3>${manager.getName()}</h3>
+            <h3>${manager.getRole()}</h3>
+            <p>${manager.getId()}</p>
+            <p>${manager.getEmail()}</p>
+            <p>${manager.getOfficeNumber()}</p>
+        </div>
+            `
+        };
+
+        const buildEngineer = engineer => {
+            return `
+        <div class="card">
+            <h3>${engineer.getName()}</h3>
+            <h3>${engineer.getRole()}</h3>
+            <p>${engineer.getId()}</p>
+            <p>${engineer.getEmail()}</p>
+            <p>${engineer.getGithub()}</p>
+        </div>
+            `
+        };
+
+        const buildIntern = intern => {
+            return `
+        <div class="card">
+            <h3>${intern.getName()}</h3>
+            <h3>${intern.getRole()}</h3>
+            <p>${intern.getId()}</p>
+            <p>${intern.getEmail()}</p>
+            <p>${intern.getSchool()}</p>
+        </div>
+            `;
+        };
+
+        const htmldoc = [];
+
+        htmldoc.push(team
+            .filter(employee => employee.getRole() === "Manager")
+            .map(manager => buildManager(manager))
+            .join("")
+        );
+        htmldoc.push(team
+            .filter(employee => employee.getRole() === "Engineer")
+            .map(engineer => buildEngineer(engineer))
+            .join("")
+        );
+        htmldoc.push(team
+            .filter(employee => employee.getRole() === "Intern")
+            .map(intern => buildIntern(intern))
+            .join("")
+        );
+
+        return htmlBuilder.join("")
+
+    }
+//I think that another const/function can be placed here. and then the fs.writeFile can go below that and still be inside the buildhtml function
+    return `
+    
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+   
+    <!-- <style>
+    body {background-color: powderblue;}
+    h1   {color: blue;}
+    p    {color: red;}
+    </style> -->
+
+    <title>Document</title>
+</head>
+<body>
+    <header>My Team</header>
+    <main>
+        ${buildhtml(team)}
+    </main>
+</body>
+</html>
+    `;
+
 }
+
+
+
+
+    fs.writeFile("dist/index.html", htmlSheet, (err) =>
+    err ? console.log(err) : console.log("Success!")
+    );
+
 
 buildTeam();

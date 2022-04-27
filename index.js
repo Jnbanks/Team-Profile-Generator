@@ -34,8 +34,10 @@ function buildTeam() {
                 break;
 
             case "Everyone has been added!":
-                htmlBuilder();
-                cssBuilder();
+                fs.writeFile("dist/index.html", generateHtml(employees), (err) =>
+                err ? console.log(err) : console.log("Success!")
+                );
+                //cssBuilder();
                 break;
 
             default:
@@ -71,6 +73,7 @@ function addManager() {
     ]).then(answers => {
         const newManager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOfficeNumber);
         employees.push(newManager);
+        console.log(newManager);
         buildTeam();
     })
 }
@@ -129,49 +132,69 @@ function addIntern() {
         }
 
     ]).then(answers => {
-        const newIntern = new Intern(answers.InternName, answers.InternId, answers.InternEmail, answers.InternSchool);
+        console.log(answers);
+        const newIntern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool);
         employees.push(newIntern);
         buildTeam();
     })
 }
 
-function htmlBuilder () {
+function buildhtml (team) {
     console.log("Team built!");
 
-    const buildhtml = team => {
+    // const buildhtml = team => {
 
         const buildManager = manager => {
+            console.log(manager);
             return `
-        <div class="card">
-            <h3>${manager.getName()}</h3>
-            <h3>${manager.getRole()}</h3>
-            <p>${manager.getId()}</p>
-            <p>${manager.getEmail()}</p>
-            <p>${manager.getOfficeNumber()}</p>
+            <div class="card employee-card">
+            <div class="card-header">
+                <h2 class="card-title">${manager.getName()}</h2>
+                <h3 class="card-title"><i class="fas fa-mug-hot mr-2"></i>${manager.getRole()}</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item">ID: ${manager.getId()}</li>
+                    <li class="list-group-item">Email: <a href="mailto:${manager.getEmail()}">${manager.getEmail()}</a></li>
+                    <li class="list-group-item">Office number: ${manager.getOfficeNumber()}</li>
+                </ul>
+            </div>
         </div>
             `
         };
 
         const buildEngineer = engineer => {
             return `
-        <div class="card">
-            <h3>${engineer.getName()}</h3>
-            <h3>${engineer.getRole()}</h3>
-            <p>${engineer.getId()}</p>
-            <p>${engineer.getEmail()}</p>
-            <p>${engineer.getGithub()}</p>
+            <div class="card employee-card">
+            <div class="card-header">
+                <h2 class="card-title">${engineer.getName()}</h2>
+                <h3 class="card-title"><i class="fas fa-glasses mr-2"></i>${engineer.getRole()}</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item">ID: ${engineer.getId()}</li>
+                    <li class="list-group-item">Email: <a href="mailto:${engineer.getEmail()}">${engineer.getEmail()}</a></li>
+                    <li class="list-group-item">GitHub: <a href="https://github.com/${engineer.getGithub()}" target="_blank" rel="noopener noreferrer">${engineer.getGithub()}</a></li>
+                </ul>
+            </div>
         </div>
             `
         };
 
         const buildIntern = intern => {
             return `
-        <div class="card">
-            <h3>${intern.getName()}</h3>
-            <h3>${intern.getRole()}</h3>
-            <p>${intern.getId()}</p>
-            <p>${intern.getEmail()}</p>
-            <p>${intern.getSchool()}</p>
+            <div class="card employee-card">
+            <div class="card-header">
+                <h2 class="card-title">${intern.getName()}</h2>
+                <h3 class="card-title"><i class="fas fa-user-graduate mr-2"></i>${intern.getRole()}</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item">ID: ${intern.getId()}</li>
+                    <li class="list-group-item">Email: <a href="mailto:${intern.getEmail()}">${intern.getEmail()}</a></li>
+                    <li class="list-group-item">School: ${intern.getSchool()}</li>
+                </ul>
+            </div>
         </div>
             `;
         };
@@ -194,45 +217,47 @@ function htmlBuilder () {
             .join("")
         );
 
-        return htmlBuilder.join("")
-
-    }
+        return htmldoc.join("")
+}
 //I think that another const/function can be placed here. and then the fs.writeFile can go below that and still be inside the buildhtml function
+function generateHtml (team) {
     return `
     
     <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
-   
-    <!-- <style>
-    body {background-color: powderblue;}
-    h1   {color: blue;}
-    p    {color: red;}
-    </style> -->
 
-    <title>Document</title>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>My Team</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/c502137733.js"></script>
 </head>
+
 <body>
-    <header>My Team</header>
-    <main>
-        ${buildhtml(team)}
-    </main>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 jumbotron mb-3 team-heading">
+                <h1 class="text-center">My Team</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="team-area col-12 d-flex justify-content-center">
+                ${buildhtml(team)}
+            </div>
+        </div>
+    </div>
 </body>
 </html>
     `;
 
 }
 
-
-
-
-    fs.writeFile("dist/index.html", htmlSheet, (err) =>
-    err ? console.log(err) : console.log("Success!")
-    );
 
 
 buildTeam();
